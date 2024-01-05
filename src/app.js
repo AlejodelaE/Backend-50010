@@ -1,5 +1,6 @@
 const express = require('express');
-const ProductManager = require('./product_manager'); // Asegúrate de que la ruta sea correcta si el archivo está en otro directorio.
+const exphbs = require('express-handlebars');
+const ProductManager = require('./product_manager');// Asegúrate de que la ruta sea correcta si el archivo está en otro directorio.
 const productRoutes = require('./routers/productRoutes');
 const cartRoutes = require('./routers/cartRoutes');
 

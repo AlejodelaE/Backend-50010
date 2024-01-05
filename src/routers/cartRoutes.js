@@ -1,27 +1,13 @@
 const express = require('express');
-const fs = require('fs').promises;
+const CartManager = require('../cartManager'); // Asegúrate de importar el cartManager correctamente
+const cartManager = new CartManager('carts.json'); // Asume que 'carts.json' es el archivo donde se almacenan los carritos
 
 const cartsRouter = express.Router();
-
-// Función para generar un ID único para el carrito
-function generateCartId(carts) {
-    const lastCart = carts[carts.length - 1];
-    return lastCart ? lastCart.id + 1 : 1;
-}
 
 // POST /api/carts/
 cartsRouter.post('/', async (req, res) => {
     try {
-        const carts = JSON.parse(await fs.readFile('carts.json', 'utf8'));
-
-        const newCart = {
-            id: generateCartId(carts),
-            products: []
-        };
-
-        carts.push(newCart);
-        await fs.writeFile('carts.json', JSON.stringify(carts, null, 2));
-
+        const newCart = await cartManager.createCart();
         res.json(newCart);
     } catch (error) {
         console.error(error);
@@ -32,9 +18,7 @@ cartsRouter.post('/', async (req, res) => {
 // GET /api/carts/:cid
 cartsRouter.get('/:cid', async (req, res) => {
     try {
-        const carts = JSON.parse(await fs.readFile('carts.json', 'utf8'));
-        const cart = carts.find(c => c.id === parseInt(req.params.cid));
-
+        const cart = await cartManager.getCartById(req.params.cid);
         if (cart) {
             res.json(cart);
         } else {
@@ -49,28 +33,15 @@ cartsRouter.get('/:cid', async (req, res) => {
 // POST /api/carts/:cid/product/:pid
 cartsRouter.post('/:cid/product/:pid', async (req, res) => {
     try {
-        const carts = JSON.parse(await fs.readFile('carts.json', 'utf8'));
-        const cart = carts.find(c => c.id === parseInt(req.params.cid));
+        const cartId = parseInt(req.params.cid);
+        const productId = parseInt(req.params.pid);
 
-        if (cart) {
-            const productId = parseInt(req.params.pid);
-            const existingProduct = cart.products.find(p => p.id === productId);
-
-            if (existingProduct) {
-                // Si el producto ya existe, incrementamos la cantidad
-                existingProduct.quantity += 1;
-            } else {
-                // Si el producto no existe, lo agregamos al carrito con cantidad 1
-                cart.products.push({
-                    id: productId,
-                    quantity: 1
-                });
-            }
-
-            await fs.writeFile('carts.json', JSON.stringify(carts, null, 2));
-            res.json(cart);
+        const updatedCart = await cartManager.addOrUpdateProduct(cartId, productId);
+        
+        if (updatedCart) {
+            res.json(updatedCart);
         } else {
-            res.status(404).send('Carrito no encontrado.');
+            res.status(404).send('Carrito no encontrado o producto no agregado.');
         }
     } catch (error) {
         console.error(error);
@@ -81,19 +52,8 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
 // DELETE /api/carts/:cid/product/:pid
 cartsRouter.delete('/:cid/product/:pid', async (req, res) => {
     try {
-        const carts = JSON.parse(await fs.readFile('carts.json', 'utf8'));
-        const cart = carts.find(c => c.id === parseInt(req.params.cid));
-
-        if (cart) {
-            const index = cart.products.findIndex(p => p.id === parseInt(req.params.pid));
-            if (index !== -1) {
-                cart.products.splice(index, 1);
-                await fs.writeFile('carts.json', JSON.stringify(carts, null, 2));
-            }
-            res.json(cart);
-        } else {
-            res.status(404).send('Carrito no encontrado.');
-        }
+        const cart = await cartManager.removeProductFromCart(req.params.cid, req.params.pid);
+        res.json(cart);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al eliminar producto del carrito.');
