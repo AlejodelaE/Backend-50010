@@ -1,6 +1,6 @@
 const express = require('express');
-const CartManager = require('../cartManager'); // Asegúrate de importar el cartManager correctamente
-const cartManager = new CartManager('carts.json'); // Asume que 'carts.json' es el archivo donde se almacenan los carritos
+const CartManager = require('../cartManager');
+const cartManager = new CartManager('carts.json');
 
 const cartsRouter = express.Router();
 
