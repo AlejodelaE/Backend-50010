@@ -1,0 +1,92 @@
+<!-- views/realTimeProducts.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Products</title>
+</head>
+<body>
+    <h2>Listado de Productos en Tiempo Real</h2>
+
+    <!-- Formulario para agregar productos -->
+    <form id="productForm">
+        <label for="title">Nombre del Producto:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="description">Descripción del Producto:</label>
+        <input type="text" id="description" name="description" required>
+
+        <label for="price">Precio del Producto:</label>
+        <input type="number" id="price" name="price" required>
+
+        <label for="thumbnail">URL del Thumbnail:</label>
+        <input type="text" id="thumbnail" name="thumbnail" required>
+
+        <label for="code">Código del Producto:</label>
+        <input type="text" id="code" name="code" required>
+
+        <label for="stock">Stock del Producto:</label>
+        <input type="number" id="stock" name="stock" required>
+
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <!-- Listado de productos -->
+    <ul id="productList">
+        {{#each products}}
+        <li>
+            {{this.title}} - ${{this.price}} - Stock: {{this.stock}}
+            <button class="delete-product" data-id="{{this.id}}">Eliminar</button>
+        </li>
+        {{/each}}
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Escuchar el evento para recibir la lista de productos
+        socket.on('updateProducts', (products) => {
+            updateProductList(products);
+        });
+
+        // Manejar el envío del formulario
+        document.getElementById('productForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const productData = {};
+
+            formData.forEach((value, key) => {
+                productData[key] = value;
+            });
+
+            // Emitir el evento para agregar un nuevo producto
+            socket.emit('addProduct', productData);
+        });
+
+        // Manejar el clic en el botón Eliminar
+        document.getElementById('productList').addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-product')) {
+                const productId = event.target.getAttribute('data-id');
+                
+                // Emitir el evento para eliminar un producto
+                socket.emit('deleteProduct', productId);
+            }
+        });
+
+        // Función para actualizar la lista de productos en la vista
+        function updateProductList(products) {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            products.forEach((product) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `${product.title} - $${product.price} - Stock: ${product.stock} <button class="delete-product" data-id="${product.id}">Eliminar</button>`;
+                productList.appendChild(listItem);
+            });
+        }
+    </script>
+
+</body>
+</html>

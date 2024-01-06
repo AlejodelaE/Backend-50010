@@ -43,6 +43,11 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
         } else {
             res.status(404).send('Carrito no encontrado o producto no agregado.');
         }
+        
+        // Emitir un evento a todos los clientes conectados para informar sobre el nuevo producto
+        io.emit('productoNuevo', newProduct);
+
+        res.json(cart);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al agregar producto al carrito.');
