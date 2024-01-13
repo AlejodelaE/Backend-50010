@@ -1,107 +1,91 @@
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const exphbs = require('express-handlebars');
-const ProductManager = require('./product_manager');
-const productRoutes = require('./routers/productRoutes');
-const cartRoutes = require('./routers/cartRoutes');
-
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const handlebars = require('express-handlebars');
+const { Server: ServerIO } = require('socket.io');
+const fs = require('fs');
 
-const port = 8080;
+const cartRouter = require('./routers/cartRoutes.js');
+const productRouter = require('./routers/productRoutes.js');
 
-const productManager = new ProductManager('products.json');
+// Leer datos de productos desde un archivo JSON
+const productsData = fs.readFileSync('products.json', 'utf-8');
+let productos = JSON.parse(productsData);
 
-// Configurar Handlebars
-app.engine('.handlebars', exphbs.engine({ defaultLayout: 'main', extname: '.handlebars' }));
-app.set('view engine', '.handlebars');
-
-
-// Middleware para servir archivos estáticos (si tienes algún directorio con archivos estáticos)
-// app.use(express.static('public'));
-
+// Configuración de Express
+app.use(express.static(__dirname + "/public"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/products', productRoutes);
-app.use('/api/carts', cartRoutes);
+// Configuración de Handlebars
+const hbs = handlebars.create();
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/views');
 
-app.get('/products', async (req, res) => {
-    try {
-        const limit = req.query.limit ? parseInt(req.query.limit) : null;
-        const products = await productManager.getProducts();
-        
-        if (limit) {
-            res.json(products.slice(0, limit));
-        } else {
-            res.json(products);
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener productos.' });
-    }
+// Rutas para renderizar páginas con la lista de productos
+app.get('/', (req, res) => {
+    res.render('home', { productos });
 });
 
-app.get('/products/:pid', async (req, res) => {
-    try {
-        const productId = parseInt(req.params.pid);
-        const product = await productManager.getProductById(productId);
-
-        if (product) {
-            res.json(product);
-        } else {
-            res.status(404).json({ error: 'Producto no encontrado.' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener producto.' });
-    }
+app.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts', { productos });
 });
 
-app.get('/home', async (req, res) => {
-    try {
-        const products = await productManager.getProducts();
-        res.render('home', { products });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener productos.' });
-    }
+// Configuración de rutas para la API
+app.use('/api/carts', cartRouter);
+app.use('/api/products', productRouter);
+
+// Creación del servidor HTTP y Socket.IO
+const httpServer = app.listen(8080, () => {
+    console.log('Server listening on port 8080');
 });
 
-app.get('/realTimeProducts', (req, res) => {
-    // Aquí puedes enviar datos a la vista si es necesario
-    res.render('realTimeProducts');
-});
+const io = new ServerIO(httpServer);
 
-// Socket.io: Manejo de eventos (Puedes personalizar según tus necesidades)
+// Evento de conexión con Socket.IO
 io.on('connection', (socket) => {
-    console.log('Usuario conectado:', socket.id);
+    console.log('Usuario conectado');
 
-    // Ejemplo: Manejo de un evento desde el cliente
-    socket.on('productoNuevo', (producto) => {
-        // Lógica para manejar un nuevo producto desde el cliente
-        console.log('Nuevo producto recibido:', producto);
-        // Actualiza la vista en tiempo real (puedes emitir eventos a los clientes conectados)
+    emitirListaDeProductos(socket);
+
+    socket.on('eliminarProducto', (productId) => {
+        const success = eliminarProductoPorId(productId);
+
+        socket.emit('eliminarCodigoResponse', success);
+
+        emitirListaDeProductos();
     });
 
-    // Puedes agregar más lógica para manejar eventos según tus necesidades
-});
+    // Manejador para el evento 'addProduct'
+    socket.on('addProduct', (newProduct) => {
+        agregarNuevoProducto(newProduct);
 
-io.on('connection', (socket) => {
-    // Enviar la lista de productos cuando un cliente se conecta
-    io.emit('updateProducts', productManager.getProducts());
-
-    // Manejar el evento para agregar un nuevo producto
-    socket.on('addProduct', (productData) => {
-        productManager.addProduct(productData);
-        io.emit('updateProducts', productManager.getProducts());
-    });
-
-    // Manejar el evento para eliminar un producto
-    socket.on('deleteProduct', (productId) => {
-        productManager.deleteProduct(productId);
-        io.emit('updateProducts', productManager.getProducts());
+        emitirListaDeProductos();
     });
 });
 
-server.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+// Función para eliminar un producto por su ID
+function eliminarProductoPorId(productId) {
+    productos = productos.filter(producto => producto.id !== productId);
+    return true;
+}
+
+// Función para agregar un nuevo producto a la lista
+function agregarNuevoProducto(newProduct) {
+    productos.push(newProduct);
+}
+
+// Función para emitir la lista de productos a un cliente específico o a todos los clientes
+function emitirListaDeProductos(socket) {
+    const productos = obtenerListaDeProductos();
+    if (socket) {
+        socket.emit('updateProducts', productos);
+    } else {
+        io.emit('updateProducts', productos);
+    }
+}
+
+// Función para obtener la lista actualizada de productos (lógica simulada)
+function obtenerListaDeProductos() {
+    return productos;
+}
