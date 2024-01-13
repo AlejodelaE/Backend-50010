@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${product.title}</td>
                 <td>${product.description}</td>
                 <td>${product.code}</td>
+                <td>${product.stock}</td>
                 <td><button class="eliminarBtn" data-id="${product.id}">Eliminar</button></td>
             `;
             productList.appendChild(row);
