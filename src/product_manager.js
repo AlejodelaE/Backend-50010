@@ -162,5 +162,76 @@ class ProductManager {
     }
 }
 
+// Ejemplo de uso
+const manager = new ProductManager('products.json');
+
+(async () => {
+    // Añadir productos
+    await manager.addProduct({
+        title: "Laptop",
+        description: "Una computadora portátil",
+        price: 1000,
+        thumbnail: "path/to/laptop.jpg",
+        code: "LPTP001",
+        stock: 10
+    });
+
+    await manager.addProduct({
+        title: "Mouse",
+        description: "Un ratón para computadora",
+        price: 20,
+        thumbnail: "path/to/mouse.jpg",
+        code: "MS001",
+        stock: 50
+    });
+
+    await manager.addProduct({
+        title: "Teclado",
+        description: "Un teclado para computadora",
+        price: 50,
+        thumbnail: "path/to/keyboard.jpg",
+        code: "KB001",
+        stock: 30
+    });
+
+    await manager.addProduct({
+        title: "Monitor",
+        description: "Un monitor de pantalla plana",
+        price: 200,
+        thumbnail: "path/to/monitor.jpg",
+        code: "MNT001",
+        stock: 20
+    });
+
+    // Obtener todos los productos
+    const products = await manager.getProducts();
+    console.log("Todos los productos:", products);
+
+    // Obtener producto por ID
+    const productId = 2; // Por ejemplo, el ID del producto "Mouse"
+    const productById = await manager.getProductById(productId);
+    console.log("Producto por ID:", productById);
+
+    // Actualizar producto
+    const updatedProduct = {
+        title: "Mouse inalámbrico",
+        description: "Un ratón inalámbrico para computadora",
+        price: 25,
+        thumbnail: "path/to/wireless-mouse.jpg",
+        code: "MS001",
+        stock: 45
+    };
+    await manager.updateProduct(productId, updatedProduct);
+    console.log("Producto actualizado.");
+
+    // Eliminar producto
+    await manager.deleteProduct(4); // Por ejemplo, eliminar el producto con ID 4 (Monitor)
+    console.log("Producto eliminado.");
+
+    // Verificar productos actualizados
+    const updatedProducts = await manager.getProducts();
+    console.log("Productos actualizados:", updatedProducts);
+})();
+
 // Exporta la clase ProductManager para que pueda ser utilizada en otros archivos
 module.exports = ProductManager;

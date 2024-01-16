@@ -4,8 +4,11 @@ const handlebars = require('express-handlebars');
 const { Server: ServerIO } = require('socket.io');
 const fs = require('fs');
 
+const ProductManager = require('./product_manager');
 const cartRouter = require('./routers/cartRoutes.js');
 const productRouter = require('./routers/productRoutes.js');
+
+const productManager = new ProductManager('products.json');
 
 // Leer datos de productos desde un archivo JSON
 const productsData = fs.readFileSync('products.json', 'utf-8');
