@@ -135,11 +135,6 @@ productsRouter.delete('/:pid', async (req, res) => {
         } else {
             res.status(404).send('Producto no encontrado.');
         }
-
-         // Emitir un evento a todos los clientes conectados para informar sobre el producto eliminado
-        io.emit('productoEliminado', productId);
-
-        res.status(204).send();
     } catch (error) {
         res.status(500).send('Error al eliminar producto.');
     }

@@ -1,74 +1,47 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const socket = io();
-    let lastProductId = 0;
+const socket = io();
 
-    // Manejador de Evento para Actualizar Productos:
-    socket.on('updateProducts', updateProductsHandler);
+// Obtener referencia al formulario y a la lista de productos en tiempo real
+const productForm = document.getElementById('productForm');
+const realTimeProductList = document.getElementById('realTimeProductList');
 
-    function updateProductsHandler(products) {
-        const productList = document.getElementById('productList');
+// Escuchar evento para actualizar la lista de productos en tiempo real
+socket.on('updateProducts', (products) => {
+    // Limpiar la lista antes de agregar los nuevos productos
+    realTimeProductList.innerHTML = '';
 
-        productList.innerHTML = '';
-
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.title}</td>
-                <td>${product.description}</td>
-                <td>${product.code}</td>
-                <td>${product.stock}</td>
-                <td><button class="eliminarBtn" data-id="${product.id}">Eliminar</button></td>
-            `;
-            productList.appendChild(row);
-
-            // Actualizar lastProductId al máximo ID existente
-            lastProductId = Math.max(lastProductId, product.id);
-        });
-
-        // Añadir manejadores de eventos para los botones de eliminar
-        const eliminarButtons = document.querySelectorAll('.eliminarBtn');
-        eliminarButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const productId = parseInt(this.getAttribute('data-id'));
-                if (!isNaN(productId)) {
-                    socket.emit('eliminarProducto', productId);
-                } else {
-                    alert('Error al obtener el ID del producto.');
-                }
-            });
-        });
-    }
-
-    // Manejador de Evento para Agregar Nuevos Productos:
-    document.getElementById('addProductForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        // Agregar Nuevo Producto:
-        const title = document.getElementById('title').value.trim();
-        const description = document.getElementById('description').value.trim();
-        const code = document.getElementById('code').value.trim();
-        const price = parseFloat(document.getElementById('price').value);
-        const stock = parseInt(document.getElementById('stock').value);
-        const category = document.getElementById('category').value.trim();
-        const thumbnails = document.getElementById('thumbnails').value.trim().split(',');
-
-        const newProduct = {
-            id: lastProductId + 1,
-            title,
-            description,
-            code,
-            price,
-            stock,
-            category,
-            thumbnails
-        };
-
-        socket.emit('addProduct', newProduct);
-
-        // Incrementar lastProductId solo después de agregar el nuevo producto
-        lastProductId++;
-
-        this.reset();
+    products.forEach((product) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <strong>ID:</strong> ${product.id} <br>
+            <strong>Título:</strong> ${product.title} <br>
+            <strong>Descripción:</strong> ${product.description} <br>
+            <strong>Código:</strong> ${product.code} <br>
+            <strong>Precio:</strong> ${product.price} <br>
+            <strong>Status:</strong> ${product.status} <br>
+            <strong>Stock:</strong> ${product.stock} <br>
+            <strong>Categoría:</strong> ${product.category} <br>
+            <strong>Thumbnails:</strong> ${product.thumbnails} <br>
+            <!-- Agregar otros campos según sea necesario -->
+        `;
+        realTimeProductList.appendChild(li);
     });
+});
+
+// Manejar el evento de submit del formulario
+productForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Obtener los valores del formulario
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const code = document.getElementById('code').value;
+    const price = document.getElementById('price').value;
+    const stock = document.getElementById('stock').value;
+    const category = document.getElementById('category').value;
+    const thumbnails = document.getElementById('thumbnails').value;
+
+    // Emitir evento al servidor para agregar un nuevo producto
+    socket.emit('addProduct', { title, description, code, price, stock, category, thumbnails });
+
+    console.log('Evento addProduct emitido al servidor');
 });

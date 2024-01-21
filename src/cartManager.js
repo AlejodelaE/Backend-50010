@@ -29,20 +29,20 @@ class CartManager {
     }
 
     async createCart() {
-        const carts = await this.getCarts();
+        const carts = await this.getCartsFromFile();
         const newCart = {
             id: this.generateCartId(carts),
             products: []
         };
         carts.push(newCart);
-        await this.saveCarts(carts);
+        await this.saveCartsToFile(carts);
         return newCart;
     }
 
     async getCartById(cartId) {
-        const carts = await this.getCarts();
+        const carts = await this.getCartsFromFile();
         return carts.find(c => c.id === parseInt(cartId));
-    }
+    }    
 
     async addOrUpdateProduct(cartId, productId) {
         let carts = await this.getCartsFromFile();
@@ -64,14 +64,14 @@ class CartManager {
     }
 
     async removeProductFromCart(cartId, productId) {
-        const carts = await this.getCarts();
+        const carts = await this.getCartsFromFile();
         const cart = carts.find(c => c.id === parseInt(cartId));
 
         if (cart) {
             const index = cart.products.findIndex(p => p.id === parseInt(productId));
             if (index !== -1) {
                 cart.products.splice(index, 1);
-                await this.saveCarts(carts);
+                await this.saveCartsToFile(carts);
             }
             return cart;
         } else {

@@ -1,94 +1,116 @@
 const express = require('express');
-const app = express();
-const handlebars = require('express-handlebars');
-const { Server: ServerIO } = require('socket.io');
-const fs = require('fs');
-
+const http = require('http');
+const socketIo = require('socket.io');
+const exphbs = require('express-handlebars');
 const ProductManager = require('./product_manager');
-const cartRouter = require('./routers/cartRoutes.js');
-const productRouter = require('./routers/productRoutes.js');
+const productRoutes = require('./routers/productRoutes');
+const cartRoutes = require('./routers/cartRoutes');
+
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+
+const port = 8080;
 
 const productManager = new ProductManager('products.json');
 
-// Leer datos de productos desde un archivo JSON
-const productsData = fs.readFileSync('products.json', 'utf-8');
-let productos = JSON.parse(productsData);
+app.engine('handlebars', exphbs.engine());
+app.set('view engine', 'handlebars');
 
-// Configuración de Express
-app.use(express.static(__dirname + "/public"));
+// Middleware para manejar solicitudes JSON y URL codificadas
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración de Handlebars
-const hbs = handlebars.create();
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/views');
+// Configuración de rutas
+app.use('/api/products', productRoutes);
+app.use('/api/carts', cartRoutes);
 
-// Rutas para renderizar páginas con la lista de productos
-app.get('/', (req, res) => {
-    res.render('home', { productos });
+app.get('/products', async (req, res) => {
+    try {
+        const limit = req.query.limit ? parseInt(req.query.limit) : null;
+        const products = await productManager.getProducts();
+
+        if (limit) {
+            res.json(products.slice(0, limit));
+        } else {
+            res.json(products);
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener productos.' });
+    }
 });
 
-app.get('/realtimeproducts', (req, res) => {
-    res.render('realTimeProducts', { productos });
+app.get('/products/:pid', async (req, res) => {
+    try {
+        const productId = parseInt(req.params.pid);
+        const product = await productManager.getProductById(productId);
+
+        if (product) {
+            res.json(product);
+        } else {
+            res.status(404).json({ error: 'Producto no encontrado.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener producto.' });
+    }
 });
 
-// Configuración de rutas para la API
-app.use('/api/carts', cartRouter);
-app.use('/api/products', productRouter);
-
-// Creación del servidor HTTP y Socket.IO
-const httpServer = app.listen(8080, () => {
-    console.log('Server listening on port 8080');
+// Configurar rutas de vistas
+app.get('/home', async (req, res) => {
+    try {
+        const products = await productManager.getProducts();
+        res.render('home', { products });
+    } catch (error) {
+        res.status(500).send('Error al obtener productos.');
+    }
 });
 
-const io = new ServerIO(httpServer);
+app.get('/realtimeproducts', async (req, res) => {
+    try {
+        const products = await productManager.getProducts();
+        res.render('realTimeProducts', { products });
+    } catch (error) {
+        res.status(500).send('Error al obtener productos.');
+    }
+});
 
-// Evento de conexión con Socket.IO
+
+// Socket.io
 io.on('connection', (socket) => {
     console.log('Usuario conectado');
 
-    emitirListaDeProductos(socket);
+    socket.on('addProduct', async (productData) => {
+        try {
+            // Agregar lógica para crear un nuevo producto con los datos recibidos
+            await productManager.addProduct(productData);
+            console.log('Evento addProduct emitido al servidor');
 
-    socket.on('eliminarProducto', (productId) => {
-        const success = eliminarProductoPorId(productId);
+            // Obtener la lista actualizada de productos después de agregar el nuevo producto
+            const updatedProducts = await productManager.getProducts();
 
-        socket.emit('eliminarCodigoResponse', success);
+            // Emitir la lista actualizada de productos a todos los clientes conectados
+            io.emit('updateProducts', updatedProducts);
 
-        emitirListaDeProductos();
+            console.log('Nuevo producto agregado:', productData);
+        } catch (error) {
+            console.error('Error al agregar un nuevo producto:', error);
+        }
     });
 
-    // Manejador para el evento 'addProduct'
-    socket.on('addProduct', (newProduct) => {
-        agregarNuevoProducto(newProduct);
+    socket.on('productDeleted', async () => {
+        try {
+            const products = await productManager.getProducts();
+            io.emit('updateProducts', products);
+        } catch (error) {
+            console.error('Error al obtener productos:', error);
+        }
+    });
 
-        emitirListaDeProductos();
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado');
     });
 });
 
-// Función para eliminar un producto por su ID
-function eliminarProductoPorId(productId) {
-    productos = productos.filter(producto => producto.id !== productId);
-    return true;
-}
-
-// Función para agregar un nuevo producto a la lista
-function agregarNuevoProducto(newProduct) {
-    productos.push(newProduct);
-}
-
-// Función para emitir la lista de productos a un cliente específico o a todos los clientes
-function emitirListaDeProductos(socket) {
-    const productos = obtenerListaDeProductos();
-    if (socket) {
-        socket.emit('updateProducts', productos);
-    } else {
-        io.emit('updateProducts', productos);
-    }
-}
-
-// Función para obtener la lista actualizada de productos (lógica simulada)
-function obtenerListaDeProductos() {
-    return productos;
-}
+server.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
