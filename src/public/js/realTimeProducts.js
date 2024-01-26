@@ -21,7 +21,6 @@ socket.on('updateProducts', (products) => {
             <strong>Stock:</strong> ${product.stock} <br>
             <strong>Categoría:</strong> ${product.category} <br>
             <strong>Thumbnails:</strong> ${product.thumbnails} <br>
-            <!-- Agregar otros campos según sea necesario -->
         `;
         realTimeProductList.appendChild(li);
     });

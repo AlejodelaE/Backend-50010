@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const socketIo = require('socket.io');
 const exphbs = require('express-handlebars');
 const ProductManager = require('./product_manager');
@@ -14,8 +15,11 @@ const port = 8080;
 
 const productManager = new ProductManager('products.json');
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middleware para manejar solicitudes JSON y URL codificadas
 app.use(express.json());
@@ -97,12 +101,13 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('productDeleted', async () => {
+    socket.on('deleteProduct', async (productId) => {
         try {
+            await productManager.deleteProduct(productId); // Asumiendo que tienes una función para eliminar
             const products = await productManager.getProducts();
             io.emit('updateProducts', products);
         } catch (error) {
-            console.error('Error al obtener productos:', error);
+            console.error('Error al eliminar producto:', error);
         }
     });
 
