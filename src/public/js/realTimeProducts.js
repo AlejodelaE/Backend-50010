@@ -1,7 +1,8 @@
 const socket = io();
 
-// Obtener referencia al formulario y a la lista de productos en tiempo real
+// Obtener referencia al formulario de productos y a la lista de productos en tiempo real
 const productForm = document.getElementById('productForm');
+const deleteProductForm = document.getElementById('deleteProductForm');
 const realTimeProductList = document.getElementById('realTimeProductList');
 
 // Escuchar evento para actualizar la lista de productos en tiempo real
@@ -22,11 +23,19 @@ socket.on('updateProducts', (products) => {
             <strong>Categoría:</strong> ${product.category} <br>
             <strong>Thumbnails:</strong> ${product.thumbnails} <br>
         `;
+        // Crear botón de eliminar para cada producto
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Eliminar';
+        deleteButton.onclick = function() {
+            socket.emit('deleteProduct', product.id);
+            console.log('Evento deleteProduct emitido al servidor para el producto ID:', product.id);
+        };
+        li.appendChild(deleteButton);
         realTimeProductList.appendChild(li);
     });
 });
 
-// Manejar el evento de submit del formulario
+// Manejar el evento de submit del formulario de productos
 productForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -43,4 +52,11 @@ productForm.addEventListener('submit', async (event) => {
     socket.emit('addProduct', { title, description, code, price, stock, category, thumbnails });
 
     console.log('Evento addProduct emitido al servidor');
+});
+
+realTimeProductList.addEventListener('click', function(event) {
+    if (event.target.className === 'deleteProductBtn') {
+        const productId = event.target.getAttribute('data-product-id');
+        socket.emit('deleteProduct', productId);
+    }
 });

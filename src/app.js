@@ -103,13 +103,18 @@ io.on('connection', (socket) => {
 
     socket.on('deleteProduct', async (productId) => {
         try {
-            await productManager.deleteProduct(productId); // Asumiendo que tienes una función para eliminar
-            const products = await productManager.getProducts();
-            io.emit('updateProducts', products);
+            // Utiliza la instancia de tu ProductManager para eliminar el producto.
+            await productManager.deleteProduct(productId);
+            // Después de eliminar, obtén la lista actualizada de productos.
+            const updatedProducts = await productManager.getProducts();
+            // Envía la lista actualizada a todos los clientes conectados.
+            io.emit('updateProducts', updatedProducts);
         } catch (error) {
-            console.error('Error al eliminar producto:', error);
+            // Manejo de errores, por ejemplo, si el ID del producto no existe.
+            socket.emit('error', 'Product deletion failed');
         }
     });
+    
 
     socket.on('disconnect', () => {
         console.log('Usuario desconectado');

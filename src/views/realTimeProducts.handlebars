@@ -25,6 +25,7 @@
 
         <button type="submit">Agregar Producto</button>
     </form>
+
     <ul id="realTimeProductList">
         {{#each products}}
             <li>
@@ -37,6 +38,8 @@
                 <strong>Stock:</strong> {{this.stock}} <br>
                 <strong>Categoría:</strong> {{this.category}} <br>
                 <strong>Thumbnails:</strong> {{this.thumbnails}} <br>
+                <!-- Botón de eliminar para cada producto -->
+                <button class="deleteProductBtn" data-product-id="{{this.id}}">Eliminar</button>
             </li>
         {{/each}}
     </ul>
