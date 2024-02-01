@@ -1,21 +1,32 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const socketIo = require('socket.io');
 const exphbs = require('express-handlebars');
-const ProductManager = require('./product_manager');
+const ProductManager = require('./dao/managers/product_manager.js');
 const productRoutes = require('./routers/productRoutes');
 const cartRoutes = require('./routers/cartRoutes');
+const usersRouter = require('./routers/users.router');
+const { connectBD } = require('./config/connectDB.js');
+const MessagesManagerMongo = require('./dao/managersMongo/messagesManagerMongo.js');
 
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 
+const messagesManager = new MessagesManagerMongo();
+
+connectBD()
+
 const port = 8080;
 
 const productManager = new ProductManager('products.json');
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middleware para manejar solicitudes JSON y URL codificadas
 app.use(express.json());
@@ -24,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración de rutas
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
+app.use('/api/users', usersRouter);
 
 app.get('/products', async (req, res) => {
     try {
@@ -74,6 +86,11 @@ app.get('/realtimeproducts', async (req, res) => {
     }
 });
 
+// Route for chat
+app.get('/chat', (req, res) => {
+    res.render('chat');
+});
+
 
 // Socket.io
 io.on('connection', (socket) => {
@@ -97,12 +114,37 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('productDeleted', async () => {
+    socket.on('deleteProduct', async (productId) => {
         try {
-            const products = await productManager.getProducts();
-            io.emit('updateProducts', products);
+            // Utiliza la instancia de tu ProductManager para eliminar el producto.
+            await productManager.deleteProduct(productId);
+            // Después de eliminar, obtén la lista actualizada de productos.
+            const updatedProducts = await productManager.getProducts();
+            // Envía la lista actualizada a todos los clientes conectados.
+            io.emit('updateProducts', updatedProducts);
         } catch (error) {
-            console.error('Error al obtener productos:', error);
+            // Manejo de errores, por ejemplo, si el ID del producto no existe.
+            socket.emit('error', 'Product deletion failed');
+        }
+    });
+    
+    // Handler for new messages
+    socket.on('new message', async (data) => {
+        try {
+            const newMessage = await messagesManager.createMessage(data.user, data.message);
+            io.emit('new message', newMessage);
+        } catch (error) {
+            console.error('Error al guardar el mensaje:', error);
+        }
+    });    
+
+    // Handler for loading previous messages
+    socket.on('load previous messages', async () => {
+        try {
+            const previousMessages = await MessagesManagerMongo.getAllMessages();
+            socket.emit('previous messages', previousMessages);
+        } catch (error) {
+            console.error('Error al cargar mensajes anteriores:', error);
         }
     });
 

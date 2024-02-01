@@ -2,9 +2,12 @@
   "name": "backend-50010",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "start:dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +17,7 @@
     "express-handlebars": "^6.0.7",
     "express-validator": "^7.0.1",
     "handlebars": "^4.7.8",
+    "mongoose": "^8.1.1",
     "socket.io": "^4.7.2"
   }
 }
