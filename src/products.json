@@ -25,5 +25,356 @@
     "code": "KB001",
     "stock": 30,
     "id": 3
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 5
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 6
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 7
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 8
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 9
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 10
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 11
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 12
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 13
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 14
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 15
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 16
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 17
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 18
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 19
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 20
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 21
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 22
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 23
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 24
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 25
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 26
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 27
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 28
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 29
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 30
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 31
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 32
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 33
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 34
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 35
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 36
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 37
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 38
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 39
+  },
+  {
+    "title": "Laptop",
+    "description": "Una computadora portátil",
+    "price": 1000,
+    "thumbnail": "path/to/laptop.jpg",
+    "code": "LPTP001",
+    "stock": 10,
+    "id": 40
+  },
+  {
+    "title": "Mouse",
+    "description": "Un ratón para computadora",
+    "price": 20,
+    "thumbnail": "path/to/mouse.jpg",
+    "code": "MS001",
+    "stock": 50,
+    "id": 41
+  },
+  {
+    "title": "Teclado",
+    "description": "Un teclado para computadora",
+    "price": 50,
+    "thumbnail": "path/to/keyboard.jpg",
+    "code": "KB001",
+    "stock": 30,
+    "id": 42
+  },
+  {
+    "title": "Monitor",
+    "description": "Un monitor de pantalla plana",
+    "price": 200,
+    "thumbnail": "path/to/monitor.jpg",
+    "code": "MNT001",
+    "stock": 20,
+    "id": 43
   }
 ]
