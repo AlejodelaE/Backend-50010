@@ -4,11 +4,11 @@ Este proyecto es una aplicación web de ecommerce desarrollada en Node.js utiliz
 
 ## Despliegue
 
-La aplicación Makalu ha sido desplegada y está disponible en el siguiente enlace: [Makalu on Railway]().
+La aplicación Kinetoscope ha sido desplegada y está disponible en el siguiente enlace: [Kinetoscope en Render](https://backend-50010.onrender.com).
 
 ## Características Principales
 
-- **Catálogo de Productos:** Explora una gran variedad de impresoras y fotocopiadoras disponibles para la compra.
+- **Catálogo de Productos:** Explora una gran variedad de videojuegos para la compra.
 - **Carrito de Compras:** Añade productos al carrito y gestiona tus compras de manera fácil y rápida.
 - **Autenticación de Usuarios:** Crea una cuenta o inicia sesión para acceder a funciones personalizadas como historial de compras e información de cuenta.
 - **Proceso de Pago Seguro:** Completa transacciones de manera segura utilizando métodos de pago confiables.
@@ -69,6 +69,7 @@ La aplicación Makalu ha sido desplegada y está disponible en el siguiente enla
    Al dar "Finalizar compra" (Dos veces) se podra observar la compra finalizada con ticket, usuario, productos, fecha de compra, etc.
 
 6. Deploy
+   https://backend-50010.onrender.com
 
 7.Cambiar rol
    - Como usuario uno tiene que ingresar a "Mi perfil", se podra observar una opción para agregar documentos y asi poder cambiar a usuario premium, al ingresar se tiene que subir 5 archvos para enviarlos y poder cambiar de usuario a usuario premium, en la terminal de VSC se observara los datos del usuario con el que uno este ingresado, en el cual "isPremium" cambia de false a true.
