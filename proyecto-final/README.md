@@ -72,7 +72,7 @@ La aplicación Kinetoscope ha sido desplegada y está disponible en el siguiente
    https://backend-50010.onrender.com
 
 7.Cambiar rol
-   - Como usuario uno tiene que ingresar a "Mi perfil", se podra observar una opción para agregar documentos y asi poder cambiar a usuario premium, al ingresar se tiene que subir 5 archvos para enviarlos y poder cambiar de usuario a usuario premium, en la terminal de VSC se observara los datos del usuario con el que uno este ingresado, en el cual "isPremium" cambia de false a true.
+   - Como usuario uno tiene que ingresar a "Mi perfil", se podra observar una opción para agregar documentos y asi poder cambiar a usuario premium, al ingresar se tiene que subir 5 archvos para enviarlos y poder cambiar de usuario a usuario premium, en la terminal de VSC se observara los datos del usuario con el que uno este ingresado, en el cual "isPremium" cambia de false a true (Se recomienda cerrar sesión y luego volver a iniciarla para ver el cambio).
 
 8. Restablecer contraseña
    - En "Home" hay una opcion que se llama "Olvidaste tu contraseña? Puedes restablecerla aqui".
