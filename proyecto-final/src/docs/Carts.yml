@@ -1,0 +1,30 @@
+paths:
+  /api/carts/:cid:
+    get:
+      summary: Devuelve el carrito correspondiente al usuario. # Descripción breve de la operación
+      tags:
+        - Carts # Etiqueta para categorizar la operación en la documentación
+      parameters:
+        - in: path # Parámetro en la ruta
+          name: cid # Nombre del parámetro
+          schema:
+            type: string # Tipo de dato del parámetro
+          required: true # Indica que el parámetro es obligatorio
+          description: ID del carrito # Descripción del parámetro
+      responses:
+        "200":
+          description: El carrito se encontro satisfactoriamente. # Descripción de la respuesta con código 200 (éxito)
+          content:
+            application/json:
+              schema:
+                type: object # Tipo de dato de la respuesta
+                properties:
+                  status:
+                    type: string # Tipo de dato de la propiedad 'status'
+                    description: Status de la operación # Descripción de la propiedad 'status'
+                  payload:
+                    $ref: "#/components/schemas/Cart" # Referencia al esquema 'Cart' definido en los componentes
+        "404":
+          description: El carrito no se encontro. # Descripción de la respuesta con código 404 (no encontrado)
+        "500":
+          description: Error del servidor. Revisar que la conexión a la base de datos sea consistente. # Descripción de la respuesta con código 500 (error del servidor)

@@ -1,0 +1,14 @@
+# Ignora la carpeta node_modules que contiene dependencias instaladas por npm o yarn
+/node_modules/
+
+# Ignora la carpeta .vscode que contiene configuraciones específicas del editor Visual Studio Code
+/.vscode/
+
+# Ignora el archivo dockerfile que se utiliza para la configuración de contenedores Docker
+/dockerfile
+
+# Ignora la carpeta test que contiene archivos de pruebas
+/test
+
+# Ignora el archivo .dockerignore que especifica qué archivos y directorios ignorar en Docker
+.dockerignore

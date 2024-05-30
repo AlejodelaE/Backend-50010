@@ -1,0 +1,12 @@
+paths:
+  /api/sessions/register:
+    post:
+      summary: Registra un nuevo usuario # Descripción breve de la operación
+      tags:
+        - Sessions # Etiqueta para categorizar la operación en la documentación
+      requestBody:
+        required: true # Indica que el cuerpo de la solicitud es obligatorio
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/newUser" # Referencia al esquema 'newUser' definido en los componentes

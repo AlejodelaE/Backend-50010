@@ -1,0 +1,71 @@
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "El identificador del producto. Generado en la base de datos." # Descripción del campo 'id'
+        title:
+          type: string
+          description: "El nombre del producto. Es requerido." # Descripción del campo 'title'
+        description:
+          type: string
+          description: "La descripción del producto.Es requerida." # Descripción del campo 'description'
+        category:
+          type: string
+          description: "La categoría del producto. Marca Principal. Es requerida." # Descripción del campo 'category'
+        code:
+          type: string
+          description: "El Código del producto. Debe ser único. Es requerido." # Descripción del campo 'code'
+        price:
+          type: number
+          description: "El precio del producto. Es requerido." # Descripción del campo 'price'
+        stock:
+          type: number
+          description: "El stock del producto. Es requerido." # Descripción del campo 'stock'
+        thumbnail:
+          type: string
+          description: "La imagen del producto. Es requerida." # Descripción del campo 'thumbnail'
+        status:
+          type: boolean
+          description: "El estado del producto." # Descripción del campo 'status'
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "El identificador del usuario. Generado en la base de datos." # Descripción del campo 'id'
+        firstName:
+          type: string
+          description: "El nombre del usuario. Es requerido." # Descripción del campo 'firstName'
+        lastName:
+          type: string
+          description: "El apellido del usuario. Es requerido." # Descripción del campo 'lastName'
+        email:
+          type: string
+          description: "El correo del usuario. Es requerido. Debe ser único" # Descripción del campo 'email'
+        password:
+          type: string
+          description: "La contraseña del usuario. Es requerida." # Descripción del campo 'password'
+        role:
+          type: string
+          description: "El rol del usuario. Es requerido. Por defecto es 'user'." # Descripción del campo 'role'
+        cart:
+          $ref: "#/components/schemas/Cart" # Referencia al esquema 'Cart'
+        active:
+          type: boolean
+          description: "El estado del usuario. Por defecto es 'true'." # Descripción del campo 'active'
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "El identificador del carrito. Generado en la base de datos." # Descripción del campo 'id'
+        quantity:
+          type: number
+          description: "La cantidad del producto. Es requerida." # Descripción del campo 'quantity'
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product" # Referencia al esquema 'Product' dentro del array 'products'
