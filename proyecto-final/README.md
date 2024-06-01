@@ -46,7 +46,7 @@ La aplicación Kinetoscope ha sido desplegada y está disponible en el siguiente
 - Node.js
 - Express
 - MongoDB
-- Railway (Deployment Platform)
+- Render (Plataforma de Despliegue)
 
 ## Instrucciomes
 1. .env
